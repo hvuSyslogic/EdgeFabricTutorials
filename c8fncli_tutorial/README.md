@@ -69,9 +69,9 @@ fabric - your function is created in this fabric.
 local - if false, it specifies that function is deployed in all regions; else only in the region specified in the gateway URL.
 
 ### NOTE:
-For all commands, you can supply input from the commandline or yaml file or environment variables or default arguments.
-You should know the precedence given to the i/p supplied from various sources:
-commandline > yaml file > environment variables > default arguments
+For all commands, you can supply input from the commandline or yaml file or environment variables or default arguments. <br />
+You should know the precedence given to the i/p supplied from various sources:<br />
+commandline > yaml file > environment variables > default arguments <br />
 If you don't supply anything, default arguments are taken.
 Environment variables to set for gateway,tenant and fabric are C8Fn_URL, C8_TENANT and C8_FABRIC resp.
 Default values for gateway,tenant and fabric are '127.0.0.1:8080', 'guest' and '_system' resp.
