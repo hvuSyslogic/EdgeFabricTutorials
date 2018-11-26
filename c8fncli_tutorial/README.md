@@ -23,9 +23,11 @@ $c8fn-cli new --lang python hello-pydemo -p macrometa -t testtenant --fabric tes
 
 This creates three files for you:
 
+```
 hello-python/handler.py
 hello-python/requirements.txt
 hello-python.yml
+```
 
 Let's edit the handler.py file:
 ```python
@@ -66,7 +68,7 @@ fabric - your function is created in this fabric.
 
 local - if false, it specifies that function is deployed in all regions; else only in the region specified in the gateway URL.
 
-###NOTE:
+### NOTE:
 For all commands, you can supply input from the commandline or yaml file or environment variables or default arguments.
 You should know the precedence given to the i/p supplied from various sources:
 commandline > yaml file > environment variables > default arguments
@@ -91,15 +93,17 @@ c8fn-cli push -f hello-pydemo.yml
 ```
 
 You have to login to execute the following operations on a function:
-1.deploy
-2.list
-3.invoke
-4.remove
+- deploy
+- list
+- invoke
+- remove
 Login command is as follows:
 ```bash
 $c8fn-cli login --gateway https://127.0.0.1:8080 --tenant testtenant --fabric testdb --username demouser --password demopassword
 ```
-Here you specify tenant login credentials. Keep in mind all are compulsory parameters.
+Here you specify tenant login credentials. 
+### NOTE: 
+Keep in mind all are compulsory parameters.
 
 tenant - tenant where you want to perform aforementioned operations on function.
 fabric - fabric where you want to perform aforementioned operations on function.
@@ -140,7 +144,7 @@ Use the remove command to remove/delete the deployed function:
 $c8fn-cli remove hello-pydemo -g http://fabric.macrometa.io --tenant testtenant --fabric testdb
 ```
 
-###Templates
+### Templates
 
 Command:
 ```bash

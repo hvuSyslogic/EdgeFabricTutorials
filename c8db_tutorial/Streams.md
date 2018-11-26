@@ -46,12 +46,13 @@ $for i in range(10):
 The producer object allows you to send messages to the topic you created. Remember to convert message to bytes before sending.
 
 ### Create a subscriber to the given persistent/non-persistent and global/local stream with the given subscription name.
+```bash
 substream_collection = sys_fabric.stream()
 subscriber1 = substream_collection.subscribe('test-stream', persistent=True, local=False, subscription_name="test-subscription-1")
 subscriber2 = substream_collection.subscribe('test-stream-1', persistent=False, local=True, subscription_name="test-subscription-2")
-
+```
 You can subscribe to a particular topic. You become a consumer of that topic by subscribing.Consumers can then subscribe to those topics, process incoming messages, and send an acknowledgement when processing is complete.
-NOTE - If no subscription new is provided then a random name is generated based on tenant and fabric information.
+NOTE - If no subscription name is provided then a random name is generated based on tenant and fabric information.
 
 ### Receive: read the published messages over stream.
 ```bash
@@ -70,7 +71,7 @@ Once a subscription has been created, all messages will be retained , even if th
 $stream_collection.get_stream_subscriptions('test-stream-1', persistent=True, local=False) #for global persistent stream
 ```
 
-### get_stream_stats
+### Get stream statistics
 ```bash
 $stream_collection.get_stream_stats('test-stream-1', persistent=True, local=False) #for global persistent stream
 
@@ -83,7 +84,7 @@ stream_collection.expire_messages_for_subscription('test-stream-1', 'test-subscr
 
 ```
 By default, unacknowledged messages are stored forever. This can lead to heavy disk space usage in cases where a lot of messages are going unacknowledged. If disk space is a concern, you can set a time to live (TTL) that determines how long unacknowledged messages will be retained.
-For 'test-stream-1', if 'test-subscription-1' subscriber doesnt consume the messages withing 60mins, it is expired.
+For 'test-stream-1', if 'test-subscription-1' subscriber doesn't consume the messages withing 60mins, it is expired.
 
 ### Expire messages on all subscriptions of stream
 ```bash
@@ -96,7 +97,7 @@ If messages aren't acknowledged in 60mins ,messages are expired for all subscrip
 stream_collection.put_stream_compaction_status('test-stream-5')
 
 ```
-By default,all unacknowledged/unprocessed messages produced on a topic are stored forever. Accumulating many unacknowledged messages on a topic is necessary for many Pulsar use cases but it can also be very time intensive for consumers to “rewind” through the entire log of messages.
+By default,all unacknowledged/unprocessed messages produced on a topic are stored forever. Accumulating many unacknowledged messages on a topic is necessary for many use cases but it can also be very time intensive for consumers to “rewind” through the entire log of messages.
 Topic compaction feature enables you to create compacted topics in which older, “obscured” entries are pruned from the topic, allowing for faster reads through the topic’s history (which messages are deemed obscured/outdated/irrelevant will depend on your use case).
 You can trigger compaction on a stream with this method call.
 
@@ -105,7 +106,7 @@ You can trigger compaction on a stream with this method call.
 stream_collection.unsubscribe('test-subscription-1')
 ```
 
-### delete subscription of a stream
+### Delete subscription of a stream
 ```bash
 stream_collection.delete_stream_subscription('test-stream-1', 'test-subscription-1' ,persistent=True, local=False)
 ```
