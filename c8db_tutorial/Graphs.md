@@ -88,33 +88,17 @@ additional safeguards:
 * All modifications are executed in transactions.
 * If a vertex is deleted, all connected edges are also automatically deleted.
 
+```bash
+$client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
+$fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
+$school = fabric.graph('school')
+$if school.has_vertex_collection('teachers'):
+    teachers = school.vertex_collection('teachers')
+else:
+    teachers = school.create_vertex_collection('teachers')
+```
+This returns an API wrapper for "teachers" vertex collection.
 
-    from c8 import C8Client
+### List vertex collections in the graph.
+school.vertex_collections()
 
-    # Initialize the C8 Data Fabric client.
-    client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
-
-    # Connect to "test" fabric as tenant admin.
-    fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
-
-    # Get the API wrapper for graph "school".
-    school = fabric.graph('school')
-
-    # Create a new vertex collection named "teachers" if it does not exist.
-    # This returns an API wrapper for "teachers" vertex collection.
-    if school.has_vertex_collection('teachers'):
-        teachers = school.vertex_collection('teachers')
-    else:
-        teachers = school.create_vertex_collection('teachers')
-
-    # List vertex collections in the graph.
-    school.vertex_collections()
-
-    # Vertex collections have similar interface as standard collections.
-    teachers.properties()
-    teachers.insert({'_key': 'jon', 'name': 'Jon'})
-    teachers.update({'_key': 'jon', 'age': 35})
-    teachers.replace({'_key': 'jon', 'name': 'Jon', 'age': 36})
-    teachers.get('jon')
-    teachers.has('jon')
-    teachers.delete('jon')

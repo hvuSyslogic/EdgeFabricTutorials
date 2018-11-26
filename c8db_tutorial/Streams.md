@@ -8,20 +8,7 @@ $tennt = client.tenant(name='mytenant', fabricname='_system', username='root', p
 $sys_fabric = client.fabric(tenant='mytenant', name='_system', username='root', password='root_pass')
 $streams = sys_fabric.streams()
 ```
-### List all persistent local streams.
-print( sys_fabric.persistent_streams(local=True) )
-
-# List all persistent global streams.
-print( sys_fabric.persistent_streams(local=False) )
-
-# List all nonpersistent local streams.
-print( sys_fabric.nonpersistent_streams(local=True) )
-
-# List all nonpersistent global streams.
-print( sys_fabric.nonpersistent_streams(local=False) )
-
-# Check if a given stream exists.
-sys_fabric.has_stream('testfabricPersLocal')
+List all streams belonging to a particular tenant and fabric
 
 ### Stream creation and publish/subscribe messages on stream 
 ```bash
@@ -33,13 +20,13 @@ In the above example, we created a new global persistent stream called test-stre
 a non-persistent stream gets created. Similarly a local stream gets created if local 
 flag is set to True. By default persistent is set to True and local is set to False .
 
-###Create a StreamCollection object to invoke stream management functions.
+### Create a StreamCollection object to invoke stream management functions.
 ```bash
 $stream_collection = sys_fabric.stream()
 ```
 'StreamCollection' object permits you to perform all stream-related activities.We will see some examples below.
 
-###Create producer for the given persistent/non-persistent and global/local stream that is created.
+### Create producer for the given persistent/non-persistent and global/local stream that is created.
 ```bash
 
 $producer1 = stream_collection.create_producer('test-stream', persistent=True, local=False)
@@ -48,7 +35,7 @@ $producer2 = stream_collection.create_producer('test-stream-1', persistent=False
 A producer is a process that attaches to a topic and publishes messages to a Pulsar broker for processing.
 Topics are named channels for transmitting messages from producers to consumers. They have a defined URL structure. Topic generation is taken care of by create_producer function.You just need to pass a stream name.
  
-###Send: publish/send a given message over stream in bytes.
+### Send: publish/send a given message over stream in bytes.
 ```bash
 $for i in range(10):
     msg1 = "Persistent: Hello from " + region + "("+ str(i) +")"
@@ -58,7 +45,7 @@ $for i in range(10):
 ```
 The producer object allows you to send messages to the topic you created. Remember to convert message to bytes before sending.
 
-#Create a subscriber to the given persistent/non-persistent and global/local stream with the given subscription name.
+### Create a subscriber to the given persistent/non-persistent and global/local stream with the given subscription name.
 substream_collection = sys_fabric.stream()
 subscriber1 = substream_collection.subscribe('test-stream', persistent=True, local=False, subscription_name="test-subscription-1")
 subscriber2 = substream_collection.subscribe('test-stream-1', persistent=False, local=True, subscription_name="test-subscription-2")
@@ -66,7 +53,7 @@ subscriber2 = substream_collection.subscribe('test-stream-1', persistent=False, 
 You can subscribe to a particular topic. You become a consumer of that topic by subscribing.Consumers can then subscribe to those topics, process incoming messages, and send an acknowledgement when processing is complete.
 NOTE - If no subscription new is provided then a random name is generated based on tenant and fabric information.
 
-###Receive: read the published messages over stream.
+### Receive: read the published messages over stream.
 ```bash
 $for i in range(10):
    msg1 = subscriber1.receive()  #Listen on stream for any receiving msg's
@@ -78,19 +65,19 @@ $for i in range(10):
 ```
 Once a subscription has been created, all messages will be retained , even if the consumer gets disconnected. Retained messages will be discarded only when a consumer acknowledges that they’ve been successfully processed.
 
-###Get the list of subscriptions for a given persistent/non-persistent local/global stream.
+### Get the list of subscriptions for a given persistent/non-persistent local/global stream.
 ```bash
 $stream_collection.get_stream_subscriptions('test-stream-1', persistent=True, local=False) #for global persistent stream
 ```
 
-###get_stream_stats
+### get_stream_stats
 ```bash
 $stream_collection.get_stream_stats('test-stream-1', persistent=True, local=False) #for global persistent stream
 
 ```
 You can get stream statistics for a particular stream by passing the stream name.
 
-###Expire messages for a given subscription of a stream.
+### Expire messages for a given subscription of a stream.
 ```bash
 stream_collection.expire_messages_for_subscription('test-stream-1', 'test-subscription-1', 3600)
 
@@ -98,13 +85,13 @@ stream_collection.expire_messages_for_subscription('test-stream-1', 'test-subscr
 By default, unacknowledged messages are stored forever. This can lead to heavy disk space usage in cases where a lot of messages are going unacknowledged. If disk space is a concern, you can set a time to live (TTL) that determines how long unacknowledged messages will be retained.
 For 'test-stream-1', if 'test-subscription-1' subscriber doesnt consume the messages withing 60mins, it is expired.
 
-###Expire messages on all subscriptions of stream
+### Expire messages on all subscriptions of stream
 ```bash
 stream_collection.expire_messages_for_subscriptions('test-stream-1',3600)
 ```
 If messages aren't acknowledged in 60mins ,messages are expired for all subscriptions. 
 
-###trigger compaction status
+### Trigger compaction status
 ```bash
 stream_collection.put_stream_compaction_status('test-stream-5')
 
@@ -113,12 +100,12 @@ By default,all unacknowledged/unprocessed messages produced on a topic are store
 Topic compaction feature enables you to create compacted topics in which older, “obscured” entries are pruned from the topic, allowing for faster reads through the topic’s history (which messages are deemed obscured/outdated/irrelevant will depend on your use case).
 You can trigger compaction on a stream with this method call.
 
-###Unsubscribes the given subscription on all streams on a stream fabric
+### Unsubscribes the given subscription on all streams on a stream fabric
 ```bash
 stream_collection.unsubscribe('test-subscription-1')
 ```
 
-###delete subscription of a stream
+### delete subscription of a stream
 ```bash
 stream_collection.delete_stream_subscription('test-stream-1', 'test-subscription-1' ,persistent=True, local=False)
 ```

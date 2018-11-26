@@ -29,7 +29,7 @@ PyC8 manages server connections through the conveniently named C8Client class.
  $ client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
  
 ```
-When this code executes, it initializes the server connection to the region URL you sepcified. By default, pyArango attempts to establish a connection to http://127.0.0.1:8529.
+When this code executes, it initializes the server connection to the region URL you sepcified. By default, pyC8 attempts to establish a connection to http://127.0.0.1:8529.
 
 ### Connecting and Creating Tenants
 
@@ -42,7 +42,7 @@ $if not sys_tenant.has_tenant("demotenant"):
 
 sys_tenant connects to the default super tenant '_mm' and '_system' fabric. 
 You need sys_tenant access level Administrate in order to execute the create_tenant call. We connected to the sys_tenant
-and then created tenant called 'demo' having password 'demopwd' having username 'root'.
+and then created tenant called 'demo' having password 'demopwd' and having username 'root'.
 
 ### Connecting and Creating Fabrics
 
@@ -58,7 +58,7 @@ $if not demotenant.has_fabric('demofabric'):
 $demotenant.update_permission(username='demouser', permission='rw', fabric='demofabric')
 ```
 You can now connect to the default sys_tenant and attempt to create a user 'demouser' having password 'demouserpwd'.
-You can then create fabric called 'demofabric' by passing a parameter called dclist. A call to returns a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa Fabric.
+You can then create fabric called 'demofabric' by passing a parameter called dclist. A call to dclist returns a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa Fabric.
 The fabric 'demofabric' is created in all the regions specified in the dclist.
 You can assign 'rw' permissions over 'demofabric' to 'demouser' 
 You need to check existence for both has_user('demouser') and has_fabric('demofabric') to ensure we do not create duplicate resources.
@@ -76,8 +76,7 @@ $employees.insert({'firstname': 'Han', 'lastname':'Solo', 'email':'han.solo@macr
 $employees.insert({'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'})
 ```
 You can create collection in a fabric. In the above example, first you connect to 'demotenant','demofabric' having 'demouser' and 'demouserpwd'.
-You can then create a collection called 'employees'. We add hash_index called 'emails' to our collection so this enforces all documents inserted in the collection 'employees' 
-to have a unique email.
+You can then create a collection called 'employees'. We add hash_index called 'emails' to our collection 'employees'. 
 You can then insert 4 documents in the employees collection.
 
 ### Query to retrieve documents using C8QL
