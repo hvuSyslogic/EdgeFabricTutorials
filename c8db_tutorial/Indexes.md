@@ -17,7 +17,7 @@ $indexes = cities.indexes()
 ```
 Retrieve all indexes belonging to 'cities' collection.
 
-# Delete the last index from the collection.
+### Delete the last index from the collection.
  ```bash
 $cities.delete_index(index['id']) 
  ```   
