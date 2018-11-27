@@ -20,6 +20,30 @@ In the above example, we created a new global persistent stream called test-stre
 a non-persistent stream gets created. Similarly a local stream gets created if local 
 flag is set to True. By default persistent is set to True and local is set to False .
 
+### List all persistent local streams.
+```bash
+$sys_fabric.persistent_streams(local=True)
+```
+### List all persistent global streams.
+```bash
+$sys_fabric.persistent_streams(local=False) 
+```
+
+### List all nonpersistent local streams.
+```bash
+$sys_fabric.nonpersistent_streams(local=True) 
+```
+
+### List all nonpersistent global streams.
+```bash
+$sys_fabric.nonpersistent_streams(local=False)
+```
+
+### Check if a given stream exists.
+```bash
+$sys_fabric.has_stream('testfabricPersLocal')
+```
+
 ### Create a StreamCollection object to invoke stream management functions.
 ```bash
 $stream_collection = sys_fabric.stream()
@@ -32,7 +56,7 @@ $stream_collection = sys_fabric.stream()
 $producer1 = stream_collection.create_producer('test-stream', persistent=True, local=False)
 $producer2 = stream_collection.create_producer('test-stream-1', persistent=False, local=True)
 ```
-A producer is a process that attaches to a topic and publishes messages to a Pulsar broker for processing.
+A producer is a process that attaches to a topic and publishes messages to a broker for processing.
 Topics are named channels for transmitting messages from producers to consumers. They have a defined URL structure. Topic generation is taken care of by create_producer function.You just need to pass a stream name.
  
 ### Send: publish/send a given message over stream in bytes.
@@ -80,7 +104,7 @@ You can get stream statistics for a particular stream by passing the stream name
 
 ### Expire messages for a given subscription of a stream.
 ```bash
-stream_collection.expire_messages_for_subscription('test-stream-1', 'test-subscription-1', 3600)
+$stream_collection.expire_messages_for_subscription('test-stream-1', 'test-subscription-1', 3600)
 
 ```
 By default, unacknowledged messages are stored forever. This can lead to heavy disk space usage in cases where a lot of messages are going unacknowledged. If disk space is a concern, you can set a time to live (TTL) that determines how long unacknowledged messages will be retained.
@@ -88,13 +112,13 @@ For 'test-stream-1', if 'test-subscription-1' subscriber doesn't consume the mes
 
 ### Expire messages on all subscriptions of stream
 ```bash
-stream_collection.expire_messages_for_subscriptions('test-stream-1',3600)
+$stream_collection.expire_messages_for_subscriptions('test-stream-1',3600)
 ```
 If messages aren't acknowledged in 60mins ,messages are expired for all subscriptions. 
 
 ### Trigger compaction status
 ```bash
-stream_collection.put_stream_compaction_status('test-stream-5')
+$stream_collection.put_stream_compaction_status('test-stream-5')
 
 ```
 By default,all unacknowledged/unprocessed messages produced on a topic are stored forever. Accumulating many unacknowledged messages on a topic is necessary for many use cases but it can also be very time intensive for consumers to “rewind” through the entire log of messages.
@@ -103,10 +127,10 @@ You can trigger compaction on a stream with this method call.
 
 ### Unsubscribes the given subscription on all streams on a stream fabric
 ```bash
-stream_collection.unsubscribe('test-subscription-1')
+$stream_collection.unsubscribe('test-subscription-1')
 ```
 
 ### Delete subscription of a stream
 ```bash
-stream_collection.delete_stream_subscription('test-stream-1', 'test-subscription-1' ,persistent=True, local=False)
+$stream_collection.delete_stream_subscription('test-stream-1', 'test-subscription-1' ,persistent=True, local=False)
 ```
