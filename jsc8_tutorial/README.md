@@ -67,7 +67,7 @@ await guestTenant.createTenant("my-password");
 
 Here a tenant named "mytenant" will be created with password as "my-password". As in the case for creating a fabric, this call is also asynchronous.
 
-### Switching to the enw tenant
+### Switching to the new tenant
 
 We’ve created a new tenant, but we haven’t yet told the driver it should start using it. Let’s change that:
 
