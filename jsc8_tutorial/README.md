@@ -16,8 +16,8 @@ npm install --global jsc8
 ```
 
 ### Getting a handle
-In order to do anything useful we need a handle to an existing C8 database.
-Let’s do this by creating a new instance of Database using a connection string:
+In order to do anything useful we need a handle to an existing C8 fabric.
+Let’s do this by creating a new instance of Fabric using a connection string:
 
 ```js
 fabric = new Fabric("https://default.dev.macrometa.io");
@@ -36,9 +36,11 @@ fabric = require('jsc8')();
 ```
 The outcome of any of the three calls should be identical.
 
-### Creating a fabric
+### Creating a Geofabric
 
-We don’t want to mess with any existing data, so let’s start by creating a new fabric called “myfabric”:
+> A Fabric consists of one or many individual "geofabrics" with which you can do anything. Each geofabric is a cluster of one or more physical locations.
+
+We don’t want to mess with any existing data, so let’s start by creating a new geofabric called “myfabric”:
 
 ```js
 await fabric.createFabric("myfabric", [{ username: 'root' }], { dcList: "fabric1.ops.aws.macrometa.io", realTime: true });
@@ -56,7 +58,7 @@ fabric.useFabric("myfabric");
 ```
 
 You’ll notice this method is executed immediately.
-The handle “fabric” now references the “myfabric” database instead of the (default) “_system” database it referenced before.
+The handle “fabric” now references the “myfabric” geofabric instead of the (default) “_system” geofabric it referenced before.
 
 ### Creating a tenant
 
@@ -82,12 +84,12 @@ The handle "fabric" now references the "mytenant" tenant instead of the (default
 Collections are where you keep your actual data.
 There are actually two types of collections but for now we only need one.
 
-Like databases, you need a handle before you can do anything to it:
+Like fabrics, you need a handle before you can do anything to it:
 ```js
 collection = fabric.collection('firstCollection');
 ```
 Again notice that it executes immediately.
-Unlike databases, the collection doesn’t have to already exist before we can create the handle.
+Unlike fabrics, the collection doesn’t have to already exist before we can create the handle.
 
 ### Creating a collection
 We have a handle but in order to put actual data in the collection we need to create it:
@@ -189,6 +191,6 @@ try {
 When you truncate a collection, you discard all of its contents.
 There’s no way back.
 
-Keep in mind that you can also truncate databases.
+Keep in mind that you can also truncate fabrics.
 Don’t worry about your collections though, truncating only deletes the documents.
 Although it’s still probably not something you want to take lightly.
