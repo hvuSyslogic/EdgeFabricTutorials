@@ -29,19 +29,11 @@ PyC8 manages server connections through the conveniently named C8Client class.
  $ client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
  
 ```
-When this code executes, it initializes the server connection to the region URL you sepcified. By default, pyC8 attempts to establish a connection to http://127.0.0.1:8529.
+When this code executes, it initializes the server connection to the region URL you sepcified. 
 
-### Connecting and Creating Tenants
+### Pre-requisite
 
-```bash
-$sys_tenant = client.tenant(name='sys_tenant', fabricname='_system', username='root', password='xxxxx')
-$if not sys_tenant.has_tenant("demotenant"):
-    sys_tenant.create_tenant('demotenant', passwd="demopwd")
-
-```
-
-You need sys_tenant access level Administrate in order to execute the create_tenant call. We connected to the sys_tenant
-and then created tenant called 'demotenant' having password 'demopwd' and having username 'root'.
+Let's assume your tenant name is `demotenant` and `root` usern password is `demopwd`.
 
 ### Connecting and Creating Fabrics
 
