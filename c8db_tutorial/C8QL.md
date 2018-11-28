@@ -1,8 +1,8 @@
 C8QL Queries
 ===========
 
-C8QL queries are invoked from C8QL API wrapper. Executing queries returns cursors.**C8 Data Fabric Query Language (C8QL)** is used to read and write data. It is similar
-to SQL for relational fabrics, but without the support for data definition operations such as creating or deleting fabrics, collections or indexes.
+C8QL queries are invoked from C8QL API wrapper. Executing queries returns cursors. `C8 Data Fabric Query Language (C8QL)` is used to read and write data. It is similar to SQL for relational fabrics, but without the support for data definition operations such as creating or deleting fabrics, collections or indexes.
+
 ```bash
 $client = C8Client(protocol='https', host='MY-C8-EDGE-DATA-FABRIC-URL', port=443)
 $fabric = client.fabric(tenant='mytenant', name='test', username='root', password='passwd')
@@ -14,8 +14,8 @@ $fabric.collection('students').insert_many([
 $c8ql = fabric.c8ql
 $c8ql.explain('FOR doc IN students RETURN doc')
 ```
-You can understand the query better using 'explain'.'explain' inspects the query and return its metadata 
-without executing it.
+
+You can understand the query better using 'explain'.'explain' inspects the query and return its metadata without executing it.
 
 ### Validate the query without executing it.
 ```bash
