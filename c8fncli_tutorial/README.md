@@ -2,9 +2,11 @@ C8Fn CLI tutorial
 ============
 
 C8Fn CLI is a tool to build and deploy serverless-functions to Macrometa Edge Fabric.
+
 The CLI is a convenient way to interact with your functions. You can use it to build or invoke or deploy or remove functions to your server using commandline.
 
 Help for all of the commands supported by the CLI can be found by running:
+
 ```bash
 $c8fn-cli help or c8fn-cli [command] --help
 ```
@@ -25,23 +27,27 @@ The main commands supported by the CLI are:
 
 
 1. Login command is as follows:
+
     ```bash
-    $c8fn-cli login --gateway https://127.0.0.1:8080 --tenant testtenant --fabric testdb --username demouser --password demopassword
+    $c8fn-cli login --gateway http://fabric.macrometa.io --tenant testtenant --fabric testdb --username demouser --password demopassword
     ```
+    
     Here you specify tenant login credentials. 
-    ### NOTE:
-    You have to login to execute the following operations on a function:
+    
+    **NOTE**: You have to login to execute the following operations on a function:
+    
     - deploy
     - list
     - invoke
     - remove 
     
-    Keep in mind all are compulsory parameters.
-    tenant - tenant where you want to perform aforementioned operations on function.
-    fabric - fabric where you want to perform aforementioned operations on function.
-    gateway - gateway where you want to perform aforementioned operations on function.
-    username - username used to login the tenant
-    password - password 
+    Following are the mandatory parameters:
+    
+    * tenant - tenant where you want to perform aforementioned operations on function.
+    * fabric - fabric where you want to perform aforementioned operations on function.
+    * gateway - gateway where you want to perform aforementioned operations on function.
+    * username - username used to login the tenant
+    * password - password 
 
 
 2. Create a new folder for your work:
@@ -63,10 +69,12 @@ The main commands supported by the CLI are:
     ```
     
     Let's edit the handler.py file:
+    
     ```python
     def handle(req):
         print("Hello! You said: " + req)
     ```
+    
     All your functions should be specified in a YAML file like this - it tells the CLI what to build and deploy onto your OpenFaaS cluster.
     
     Checkout the YAML file hello-python.yml:
@@ -84,6 +92,7 @@ The main commands supported by the CLI are:
         handler: ./hello-pydemo
         image: macrometa/hello-pydemo
     ```
+    
     gateway- here we can specify a remote gateway if we need to, what the programming language is and where our handler is located within the filesystem.
     
     functions - this block defines the functions in our stack
@@ -100,20 +109,21 @@ The main commands supported by the CLI are:
     
     local - if false, it specifies that function is deployed in all regions; else only in the region specified in the gateway URL.
 
-### NOTE:
-For all commands, you can supply input from the commandline or yaml file or environment variables or default arguments. <br />
-You should know the precedence given to the i/p supplied from various sources:<br />
-commandline > yaml file > environment variables > default arguments <br />
-If you don't supply anything, default arguments are taken.
-Environment variables to set for gateway,tenant and fabric are C8Fn_URL, C8_TENANT and C8_FABRIC resp.
-Default values for gateway,tenant and fabric are '127.0.0.1:8080', 'guest' and '_system' resp.
+**Note:**
+
+ * For all commands, you can supply input from the commandline or yaml file or environment variables or default arguments. If you don't supply anything, default arguments are taken.
+ * Environment variables to set for gateway,tenant and fabric are C8Fn_URL, C8_TENANT and C8_FABRIC resp.
+ * Default values for gateway,tenant and fabric are '127.0.0.1:8080', 'guest' and '_system' resp.
 
 
 3. So now let's build the function.
+
     ```bash
     $ c8fn-cli build -f hello-python.yml
     ```
+    
     Output of build function:
+    
     ```bash
     Successfully tagged hello-python:latest
     Image: hello-python built.
@@ -122,6 +132,7 @@ Default values for gateway,tenant and fabric are '127.0.0.1:8080', 'guest' and '
 
 
 4. Here's how to push the built function to your dockerhub repo:
+
     ```bash
     c8fn-cli push -f hello-pydemo.yml
     ```
@@ -140,8 +151,7 @@ Default values for gateway,tenant and fabric are '127.0.0.1:8080', 'guest' and '
     $c8fn-cli deploy -f hello-pydemo.yml -t testtenant -g --fabric testdb http://fabric.macrometa.io --local false
     
     ```
-    You can optionally supply commandline tenant, fabric and gateway as well. The commandline options will override the options in the yaml file.
-    The parameters specified here have mean the same as given in c8fn-cli new command.
+    You can optionally supply commandline tenant, fabric and gateway as well. The commandline options will override the options in the yaml file. The parameters specified here have mean the same as given in c8fn-cli new command.
 
 
 6. Use the list command to check whether function is available:
@@ -152,13 +162,16 @@ Default values for gateway,tenant and fabric are '127.0.0.1:8080', 'guest' and '
 
 
 7. You can invoke the function as follows:
+
     ```bash
-    $c8fn-cli invoke echo --gateway https://domain:port --tenant testtenant --fabric testdb --content-type application/json --query org=c8fn
+    $c8fn-cli invoke echo --gateway http://fabric.macrometa.io --tenant testtenant --fabric testdb --content-type application/json --query org=c8fn
     ```
+    
     You can specify content-type or query params or headers (Have a look at the c8fn-cli invoke --help to get a better idea.)
 
 
 8. Use the remove command to remove/delete the deployed function:
+
     ```bash
     $c8fn-cli remove hello-pydemo -g http://fabric.macrometa.io --tenant testtenant --fabric testdb
     ```
@@ -173,6 +186,7 @@ Default values for gateway,tenant and fabric are '127.0.0.1:8080', 'guest' and '
 ### Templates
 
 Command:
+
 ```bash
 $c8fn-cli new FUNCTION_NAME --lang python/node/go/ruby/Dockerfile/etc
 ``` 
