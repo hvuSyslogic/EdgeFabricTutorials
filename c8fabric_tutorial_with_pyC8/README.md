@@ -80,7 +80,7 @@ $fabric = client.fabric(tenant="demotenant", name="demofabric", username="demous
 $cursor = fabric.c8ql.execute('FOR employee IN employees RETURN employee') # Execute a C8QL query
 $docs = [document for document in cursor]
 ```
-You can execute C8QL query on our newly created collection 'employees'. C8QL is C8's query language. This aforementioned query is equivalent to SQL's SELECT query.
+You can execute C8QL query on our newly created collection `employees`. C8QL is C8's query language. This aforementioned query is equivalent to SQL's SELECT query.
 
 ### Delete tenant
 
