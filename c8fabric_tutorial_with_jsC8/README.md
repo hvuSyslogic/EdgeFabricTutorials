@@ -98,6 +98,50 @@ We have a handle but in order to put actual data in the collection we need to cr
 await collection.create();
 ```
 
+### Listening to collection changes in realtime
+Collections provide with a `onChange` method, with which you can see all the changes happening to an existing collection in realtime.
+
+```js
+    collection.onChange({
+      onmessage: (msg) => console.log("message=>", msg),
+      onopen: () => {
+        console.log("connection open");
+        //manipulate the collection here
+        this.collectionManipulation(collection);
+      },
+      onclose: () => console.log("connection closed")
+    }, "default.dev.macrometa.io");
+
+    async collectionManipulation(collection) {
+        const doc = {
+        _key: "employees",
+        firstname: "Bruce",
+        lastname: "Wayne"
+        };
+        try {
+        await collection.save(doc);
+        } catch (e) {
+        console.log("Could not save document", e);
+        }
+
+        try {
+        await collection.update("employees", { email: 'wayne@gmail.com' });
+        } catch (e) {
+        console.log("Could not update document", e);
+        }
+
+        try {
+        await collection.remove('employees');
+        collection.closeOnChangeConnection();
+        } catch (e) {
+        console.log(e);
+        }
+  }
+```
+Now whenever you manipulate the collection realtime messages can be seen.
+
+> Note: Remember to close the `onChange`'s listeners else you will have have a memory leak. Use  `closeOnChangeConnection` for this purpose.
+
 ### Creating a document
 What good is a collection without any collectibles? Let’s start out by defining a piece of data we want to store:
 
@@ -143,6 +187,49 @@ Once the promise has resolved, the document has ceased to exist.
 We can verify this by trying to fetch it again (which should result in an error).
 
 If you see the error message `"document not found"`, we were successful.
+
+### Streams
+The time has come now to give you a super power. In C8 you don't need to continuously make API calls to see what has changed and when. We have realtime capabilities built in C8.
+Streams can be `local/global` and `persistent/non-persistent`. Non-persistent streams forget the data once it is closed, whereas for persistent streams it gets saved.
+
+### Stream handle
+
+```js
+stream = fabric.stream(streamName, StreamType.PERSISTENT_STREAM, false);
+```
+Here the last boolean value tells if the stream is local or global. `false` means that it is global
+
+### Create a stream
+
+```js
+await stream.createStream();
+```
+
+### Subscribing to a stream
+Streams have the capability to both consume and produce messages.
+To create a consumer:
+```js
+stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "default.dev.macrometa.io");
+```
+This will create a consumer with a callback of your choice to listen to a stream in realtime.
+
+### Publishing to a stream
+To publish a message to a stream simply use:
+```js
+stream.producer("hello world", "default.dev.macrometa.io");
+```
+The first time a producer is created it requires the datacenter name, but not later on.
+
+So now you can simply do:
+```js
+stream.producer("hey hey hey world");
+```
+>Note: Remember to close the connections to the stream if you make a consumer or a producer.
+
+```js
+stream.closeWSConnections();
+```
+Above method will close all the active connection to the stream.
 
 ### C8QL Queries
 ```js
