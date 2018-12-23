@@ -14,7 +14,7 @@ C8DB support joins in C8QL queries. If one has familiarity with joins with tradi
 
 You have a collection called **users**. Users live in city and a city is identified by its primary key. In principle you can embedded the city document into the users document and be happy with it.
 
-```
+```js
 {
     "_id" : "users/2151975421",
     "_key" : "2151975421",
@@ -33,7 +33,7 @@ This works well for many use cases. Now assume, that you have additional informa
 
 A document from **cities** will look something like this -
 
-```
+```js
 {
     "population" : 1000,
     "name" : "Metropolis",
@@ -45,7 +45,7 @@ A document from **cities** will look something like this -
 
 Now you instead of embedding the city directly in the user document, you can use the key of the city. A document from **users** collection will look something like the following -
 
-```
+```js
 {
     "name" : {
         "first" : "John",
@@ -59,15 +59,16 @@ Now you instead of embedding the city directly in the user document, you can use
 ```
 We can now join these two collections very easily.
 
-```
+```js
 FOR u IN users
-FOR c IN cities
-FILTER u.city == c._id RETURN { user: u, city: c }
+    FOR c IN cities
+        FILTER u.city == c._id 
+        RETURN { user: u, city: c }
 ```
 
 Result will be something like this - 
 
-```
+```js
 [
     {
         "user" : {
@@ -95,16 +96,16 @@ Unlike SQL there is no special JOIN keyword. The optimizer ensures that the prim
 
 However, very often it is much more convenient for the client of the query if a single document would be returned, where the city information is embedded in the user document - as in the simple example above. With C8QL there you do not need to forgo this simplification.
 
-```
+```js
 FOR u IN users
-FOR c IN cities
-FILTER u.city == c._id 
-RETURN merge(u, {city: c})
+    FOR c IN cities
+        FILTER u.city == c._id 
+        RETURN merge(u, {city: c})
 ```
 
 Result - 
 
-```
+```js
 [
     {
         "_id" : "users/2290649597",
@@ -138,7 +139,7 @@ If you want to store more information, for example which author wrote which page
 
 If you only want to store the authors of a book, you can embed them as list in the book document. There is no need for a separate collection.
 
-```
+```js
 [
     {
         "_id" : "authors/2661190141", 
@@ -163,14 +164,14 @@ If you only want to store the authors of a book, you can embed them as list in t
 
 You can query books. 
 
-```
+```js
 FOR b IN books
 RETURN b
 ```
 
 Result - 
 
-```
+```js
 [
     {
         "_id" : "books/2681506301", 
@@ -187,15 +188,15 @@ Result -
 
 and join the authors in a very similar manner given in the one-to-many section.
  
-```
+```js
 FOR b IN books 
-LET a = (FOR x IN b.authors FOR a IN authors FILTER x == a._id RETURN a) 
-RETURN { book: b, authors: a }
+    LET a = (FOR x IN b.authors FOR a IN authors FILTER x == a._id RETURN a) 
+    RETURN { book: b, authors: a }
 ```
 
 Result - 
 
-```
+```js
 [
     { 
         "book" : { 
@@ -234,14 +235,15 @@ Result -
 
 or embed the authors directly
 
-```
-FOR b IN books LET a = ( FOR x IN b.authors FOR a IN authors FILTER x == a._id RETURN a)
-RETURN merge(b, { authors: a })
+```js
+FOR b IN books 
+    LET a = ( FOR x IN b.authors FOR a IN authors FILTER x == a._id RETURN a)
+    RETURN merge(b, { authors: a })
 ```
 
 Result - 
 
-```
+```js
 [
     {
         "_id" : "books/2681506301",
@@ -281,23 +283,23 @@ First create the authors collection and books collection(without any author info
 
 An edge collection is now used to link authors and books. 
 
-```
+```js
 LET e = [{
     "_from": "authors/2935261693",
     "_to": "books/2980088317",
     "pages": "1-10"
 }]
 FOR txn in e
-INSERT txn in written
+    INSERT txn in written
 ```
 
 In order to get all books with their authors you can use a graph traversal, for example - 
 
-```
+```js
 FOR b IN books 
-LET authorsByBook = (FOR author, writtenBy IN INBOUND b written 
-RETURN {vertex: author, edge: writtenBy })
-RETURN { book: b, authors: authorsByBook }
+    LET authorsByBook = (FOR author, writtenBy IN INBOUND b written 
+                            RETURN {vertex: author, edge: writtenBy })
+    RETURN { book: b, authors: authorsByBook }
 ```
 
 You can do various other graph queries like bfs etc. 
