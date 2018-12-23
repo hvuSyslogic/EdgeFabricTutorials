@@ -16,7 +16,7 @@ LET c = [
 	{"_key": "seattle", "location": [-122.333056, 47.609722]}
 ]
 FOR city IN c
-	insert city in cities
+    INSERT city IN cities
 ```
 
 Create an edge collection named `flights`. To populate the `flights` collection, execute the following query:
@@ -45,7 +45,7 @@ LET e = [
 	{"_from": "cities/houston", "_to": "cities/newyork", "distance": 2300}
 ]
 FOR edge IN e
-	INSERT edge IN flights
+    INSERT edge IN flights
 ```
 
 Create a graph named `airline` with and edges in `flights` and both from and to vertices in `cities`.
@@ -59,8 +59,8 @@ Get all cities with a direct flight to New York:
 ```js
 
 WITH cities
-	FOR city IN INBOUND "cities/newyork" flights
-		RETURN city
+     FOR city IN INBOUND "cities/newyork" flights
+	 RETURN city
 ```
 
 ### Shortest path
@@ -69,26 +69,26 @@ Get the shortest path from San Francisco to Paris:
 
 ```js
 WITH cities
-	LET path = (
-		FOR city IN OUTBOUND SHORTEST_PATH "cities/sanfrancisco" TO "cities/paris"
-			GRAPH "airline"
-			OPTIONS {"weightAttribute": "distance"}
-			RETURN city
-	)
-RETURN path
+     LET path = (
+	FOR city IN OUTBOUND SHORTEST_PATH "cities/sanfrancisco" TO "cities/paris"
+	    GRAPH "airline"
+	    OPTIONS {"weightAttribute": "distance"}
+	    RETURN city
+     )
+     RETURN path
 ```
 
 Get the distance on the shortest path from San Francisco to Paris:
 
 ```js
 WITH cities
-	LET path = (
-		FOR city, e IN OUTBOUND SHORTEST_PATH "cities/sanfrancisco" TO "cities/paris"
-			GRAPH "airline"
-			OPTIONS {"weightAttribute": "distance"}
-			RETURN e.distance
+     LET path = (
+	FOR city, e IN OUTBOUND SHORTEST_PATH "cities/sanfrancisco" TO "cities/paris"
+	    GRAPH "airline"
+	    OPTIONS {"weightAttribute": "distance"}
+	    RETURN e.distance
 	)
-RETURN SUM(path)
+	RETURN SUM(path)
 ```
 
 ### Nearest cities
