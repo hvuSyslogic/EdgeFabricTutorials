@@ -22,10 +22,10 @@ You have a collection called **users**. Users live in city and a city is identif
     "name" : {
         "first" : "John",
         "last" : "Doe"
-        },
+    },
     "city" : {
         "name" : "Metropolis"
-        } 
+    } 
 }
 ```
 
@@ -50,7 +50,7 @@ Now you instead of embedding the city directly in the user document, you can use
     "name" : {
         "first" : "John",
         "last" : "Doe"
-        },
+    },
     "city" : "cities/2241300989",
     "_id" : "users/2290649597",
     "_rev" : "2290649597",
@@ -75,19 +75,19 @@ Result will be something like this -
             "name" : {
                 "first" : "John",
                 "last" : "Doe"
-                },
+            },
             "city" : "cities/2241300989",
             "_id" : "users/2290649597",
             "_rev" : "2290649597",
             "_key" : "2290649597"
-            },
+        },
         "city" : {
             "population" : 1000, 
       		"name" : "Metropolis", 
       		"_id" : "cities/2241300989", 
       		"_rev" : "2241300989", 
       		"_key" : "2241300989"
-            } 
+        } 
   	}
 ]
 ```
@@ -114,7 +114,7 @@ Result -
         "name" : {
             "first" : "John",
             "last" : "Doe"
-            },
+        },
         "city" : {
             "_id" : "cities/2241300989",
             "_key" : "2241300989",
@@ -267,7 +267,7 @@ Result -
                 "name" : {
                     "first" : "John",
                     "last" : "Doe"
-                    }
+                }
             }
         ]
     } 
