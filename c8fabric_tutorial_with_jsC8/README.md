@@ -43,7 +43,7 @@ The outcome of any of the three calls should be identical.
 We don’t want to mess with any existing data, so let’s start by creating a new geofabric called “myfabric”:
 
 ```js
-await fabric.createFabric("myfabric", [{ username: 'root' }], { dcList: "fabric1.ops.aws.macrometa.io", realTime: true });
+await fabric.createFabric("myfabric", [{ username: 'root' }], { dcList: "fabric1.ops.aws.macrometa.io" });
 ```
 Because we’re trying to actually do something on the server, this action is asynchronous. All asynchronous methods in the C8 driver return promises but you can also pass a node-style callback instead.
 
